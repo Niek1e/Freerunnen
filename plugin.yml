@@ -1,0 +1,12 @@
+author: Niek1e
+description: Plugin voor het spel freerunnen!
+main: me.Niek1e.Freerunning.Freerunning
+name: Freerunnen
+version: 1.0
+commands:
+    fr:
+      description: Instellingen voor het spel freerunnen
+      usage: /fr <set/fstart/stop>
+permissions:
+    freerunnen.block:
+      default: op
