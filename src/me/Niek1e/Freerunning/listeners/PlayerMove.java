@@ -9,28 +9,37 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.Players;
 
-
 public class PlayerMove implements Listener {
-	
+
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent event){
-		
-		Location to = new Location(event.getPlayer().getWorld(), event.getTo().getX(), event.getTo().getY() - 1, event.getTo().getZ());
-		
-		if(to.getBlock() == null || to.getBlock().getType() == null || to.getBlock().getType() != Material.OBSIDIAN){
+	public void onPlayerMove(PlayerMoveEvent event) {
+
+		Location to = new Location(event.getPlayer().getWorld(), event.getTo().getX(), event.getTo().getY() - 1,
+				event.getTo().getZ());
+
+		if (to.getBlock() == null || to.getBlock().getType() == null) {
+			return;
+		}
+
+		if (!Players.getActivePlayers().contains(event.getPlayer())) {
 			return;
 		}
 		
-		if(!Players.getActivePlayers().contains(event.getPlayer())){
+		if (!Game.hasStarted()) {
 			return;
 		}
-		
-		if(!Game.hasStarted()){
-			return;
+
+		if (to.getBlock().getType() == Material.OBSIDIAN || to.getBlock().getType() == Material.GOLD_BLOCK) {
+			if (to.getBlock().getType() == Material.OBSIDIAN) {
+				
+				event.getPlayer().setHealth(0);
+			
+			}else if(to.getBlock().getType() == Material.GOLD_BLOCK){
+				
+				Game.stop(event.getPlayer());
+				
+			}
 		}
-		
-		event.getPlayer().setHealth(0);
 	}
-	
 
 }

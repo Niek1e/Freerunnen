@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.Niek1e.Freerunning.listeners.AsyncPlayerPreLogin;
 import me.Niek1e.Freerunning.listeners.BlockBreak;
+import me.Niek1e.Freerunning.listeners.BlockPlace;
 import me.Niek1e.Freerunning.listeners.EntityDamageByBlock;
 import me.Niek1e.Freerunning.listeners.EntityDamageByEntity;
 import me.Niek1e.Freerunning.listeners.PlayerDeath;
@@ -60,6 +61,7 @@ public class Freerunning extends JavaPlugin {
 		pm.registerEvents(new EntityDamageByEntity(), this);
 		pm.registerEvents(new EntityDamageByBlock(), this);
 		pm.registerEvents(new BlockBreak(), this);
+		pm.registerEvents(new BlockPlace(), this);
 	}
 
 	public void registerSigns() {

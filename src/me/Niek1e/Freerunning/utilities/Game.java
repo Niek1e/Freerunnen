@@ -37,7 +37,9 @@ public class Game {
 			Players.removeActive(activePlayer);
 			LocationUtilities.teleportPlayer("Spawn", activePlayer);
 			activePlayer.setGameMode(GameMode.SURVIVAL);
+			activePlayer.getInventory().clear();
 		}
+		Freerunning.getInstance().startCountdown();
 	}
 
 	public static boolean canStart() {
@@ -49,7 +51,7 @@ public class Game {
 	}
 
 	public static void setCanStart(boolean b) {
-		Freerunning.getInstance().startCountdown();
+		canStart = b;
 	}
 
 }

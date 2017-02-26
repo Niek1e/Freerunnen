@@ -10,3 +10,5 @@ commands:
 permissions:
     freerunnen.block:
       default: op
+    freerunnen.deuren:
+      default: op

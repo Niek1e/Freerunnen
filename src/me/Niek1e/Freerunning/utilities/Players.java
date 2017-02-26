@@ -34,10 +34,12 @@ public class Players {
 	}
 
 	public static void addPlayer(Player player) {
-		if (!allPlayers.contains(player))
+		if (!allPlayers.contains(player)){
 			allPlayers.add(player);
+		}
 		
 		if (Players.getAllPlayers().size() > 1) {
+			
 			Game.setCanStart(true);
 		}
 	}

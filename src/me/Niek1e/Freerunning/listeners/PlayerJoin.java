@@ -23,6 +23,8 @@ public class PlayerJoin implements Listener {
 		LocationUtilities.teleportPlayer("Spawn", player);
 
 		player.setCanPickupItems(false);
+		
+		player.getInventory().clear();
 	}
 
 }
