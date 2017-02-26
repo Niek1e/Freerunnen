@@ -38,7 +38,7 @@ public class Players {
 			allPlayers.add(player);
 		}
 		
-		if (Players.getAllPlayers().size() > 1) {
+		if (Players.getAllPlayers().size() == 1) {
 			
 			Game.setCanStart(true);
 		}

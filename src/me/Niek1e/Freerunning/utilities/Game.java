@@ -40,6 +40,14 @@ public class Game {
 			activePlayer.getInventory().clear();
 		}
 		Freerunning.getInstance().startCountdown();
+		
+		ChatUtilities.broadcast(ChatColor.GREEN + "" + player.getUniqueId() + " heeft gewonnen!");
+		
+		//MAAK EEN TABEL MET uuid EN wins
+
+		SQL.executeQuery("USERNAME", "PASSWORD", "DB_HOST", "DB_NAAM", 1234, //1234 = DB_PORT
+				"UPDATE wins SET wins = wins+1 WHERE uuid =  '" + player.getUniqueId() + "'");
+
 	}
 
 	public static boolean canStart() {
