@@ -45,8 +45,8 @@ public class Game {
 		
 		//MAAK EEN TABEL MET uuid EN wins
 
-		SQL.executeQuery("GEBRUIKERSNAAM", "WACHTWOORD", "HOSTNAME", "DATABASE", 3306, //3306 = DB_PORT
-				"UPDATE wins SET wins = wins+1 WHERE uuid =  '" + player.getUniqueId() + "'");
+		if(SQL.SQLEnabled)
+			SQL.addWin(player);
 
 	}
 

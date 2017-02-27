@@ -3,3 +3,9 @@ Locaties:
   Spawn: 1,1,1
   Spectator: 2,2,2
   Game: 3,3,3
+SQL:
+  Username:
+  Password:
+  DatabaseHost:
+  DatabaseName:
+  Port: 3306

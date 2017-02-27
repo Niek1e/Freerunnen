@@ -4,20 +4,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.Niek1e.Freerunning.listeners.AsyncPlayerPreLogin;
-import me.Niek1e.Freerunning.listeners.BlockBreak;
-import me.Niek1e.Freerunning.listeners.BlockPlace;
-import me.Niek1e.Freerunning.listeners.EntityDamageByBlock;
-import me.Niek1e.Freerunning.listeners.EntityDamageByEntity;
-import me.Niek1e.Freerunning.listeners.PlayerDeath;
-import me.Niek1e.Freerunning.listeners.PlayerDropItem;
-import me.Niek1e.Freerunning.listeners.PlayerEggThrow;
-import me.Niek1e.Freerunning.listeners.PlayerInteract;
-import me.Niek1e.Freerunning.listeners.PlayerJoin;
-import me.Niek1e.Freerunning.listeners.PlayerMove;
-import me.Niek1e.Freerunning.listeners.PlayerQuit;
-import me.Niek1e.Freerunning.listeners.PlayerRespawn;
+import me.Niek1e.Freerunning.listeners.BlockEvents;
+import me.Niek1e.Freerunning.listeners.EntityEvents;
+import me.Niek1e.Freerunning.listeners.PlayerEvents;
+import me.Niek1e.Freerunning.utilities.Database;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
+import me.Niek1e.Freerunning.utilities.SQL;
 import me.Niek1e.Freerunning.utilities.SignUtilities;
 import me.Niek1e.Freerunning.utilities.StartCountdown;
 
@@ -41,6 +33,13 @@ public class Freerunning extends JavaPlugin {
 		registerSigns();
 
 		instance = this;
+		
+		setupSQL();
+		
+	}
+	
+	public void onDisable() {
+		Database.closeAllDatabases();
 	}
 
 	public static Freerunning getInstance() {
@@ -49,19 +48,9 @@ public class Freerunning extends JavaPlugin {
 
 	public void registerListeners() {
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerJoin(), this);
-		pm.registerEvents(new AsyncPlayerPreLogin(), this);
-		pm.registerEvents(new PlayerDeath(), this);
-		pm.registerEvents(new PlayerDropItem(), this);
-		pm.registerEvents(new PlayerEggThrow(), this);
-		pm.registerEvents(new PlayerInteract(), this);
-		pm.registerEvents(new PlayerMove(), this);
-		pm.registerEvents(new PlayerQuit(), this);
-		pm.registerEvents(new PlayerRespawn(), this);
-		pm.registerEvents(new EntityDamageByEntity(), this);
-		pm.registerEvents(new EntityDamageByBlock(), this);
-		pm.registerEvents(new BlockBreak(), this);
-		pm.registerEvents(new BlockPlace(), this);
+		pm.registerEvents(new PlayerEvents(), this);
+		pm.registerEvents(new BlockEvents(), this);
+		pm.registerEvents(new EntityEvents(), this);
 	}
 
 	public void registerSigns() {
@@ -69,6 +58,26 @@ public class Freerunning extends JavaPlugin {
 		FileConfiguration config = getConfig();
 		String world = config.getString(path + "World") + ",";
 		SignUtilities.addSign(world + config.getString(path + "Sign"));
+	}
+	
+	public void setupSQL() {
+		String path = "SQL.";
+		FileConfiguration config = getConfig();
+		
+		SQL.port = 0;
+		SQL.SQLEnabled = false;
+		
+		SQL.username = config.getString(path + "Username");
+		SQL.password = config.getString(path + "Password");
+		SQL.databaseHost = config.getString(path + "DatabaseHost");
+		SQL.databaseName = config.getString(path + "DatabaseName");
+		SQL.port = config.getInt(path + "Port");
+		
+		if(SQL.username == null || SQL.username == null || SQL.username == null || SQL.username == null || SQL.port == 0){
+			SQL.SQLEnabled = false;
+		}else{
+			SQL.SQLEnabled = true;
+		}
 	}
 
 	public void setupConfig() {
