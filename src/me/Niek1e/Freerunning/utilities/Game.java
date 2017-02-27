@@ -41,8 +41,6 @@ public class Game {
 		}
 		Freerunning.getInstance().startCountdown();
 		
-		ChatUtilities.broadcast(ChatColor.GREEN + "" + player.getName() + " heeft gewonnen!");
-		
 		//MAAK EEN TABEL MET uuid EN wins
 
 		if(SQL.SQLEnabled)
