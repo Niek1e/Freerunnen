@@ -17,7 +17,7 @@ public class SQL {
 		    PreparedStatement statement = conn.prepareStatement(query);
 		    statement.executeQuery();
 		  } catch(Exception e){
-		    //Couldn't connect to the database
+		    e.printStackTrace();
 		  }
 		}
 

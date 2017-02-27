@@ -52,7 +52,7 @@ public class Players {
 		activePlayers.remove(player);
 
 		if (activePlayers.size() == 1 && GameState.isState(GameState.IN_GAME)) {
-			Game.stop(player);
+			Game.stop(activePlayers.get(0));
 		}
 	}
 

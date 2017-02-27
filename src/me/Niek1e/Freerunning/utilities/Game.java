@@ -41,11 +41,11 @@ public class Game {
 		}
 		Freerunning.getInstance().startCountdown();
 		
-		ChatUtilities.broadcast(ChatColor.GREEN + "" + player.getUniqueId() + " heeft gewonnen!");
+		ChatUtilities.broadcast(ChatColor.GREEN + "" + player.getName() + " heeft gewonnen!");
 		
 		//MAAK EEN TABEL MET uuid EN wins
 
-		SQL.executeQuery("USERNAME", "PASSWORD", "DB_HOST", "DB_NAAM", 1234, //1234 = DB_PORT
+		SQL.executeQuery("GEBRUIKERSNAAM", "WACHTWOORD", "HOSTNAME", "DATABASE", 3306, //3306 = DB_PORT
 				"UPDATE wins SET wins = wins+1 WHERE uuid =  '" + player.getUniqueId() + "'");
 
 	}
