@@ -21,7 +21,7 @@ public class StartCountdown implements Runnable {
 		lns.add("Tijd tot begin:");
 		lns.add(ChatColor.GREEN + "" + timeUntilStart + "s");
 		lns.add("Spelers online:");
-		if (Game.canStart()) {
+		if (Freerunning.currentGame.canStart()) {
 			lns.add(ChatColor.GREEN + "" + Players.getAllPlayers().size() + " speler(s)");
 		} else {
 			lns.add(ChatColor.RED + "" + Players.getAllPlayers().size() + " speler(s)");
@@ -34,13 +34,13 @@ public class StartCountdown implements Runnable {
 
 	public void run() {
 		if (timeUntilStart == 0) {
-			if (!Game.canStart()) {
+			if (!Freerunning.currentGame.canStart()) {
 				plugin.restartCountdown();
 				Bukkit.broadcastMessage(
 						Freerunning.PREFIX + "Het spel kan nu niet gestart worden, de timer wordt gereset!");
 				return;
 			}
-			Game.start();
+			Freerunning.currentGame.start();
 			plugin.stopCountdown();
 		}
 

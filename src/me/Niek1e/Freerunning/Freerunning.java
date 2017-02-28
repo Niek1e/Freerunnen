@@ -17,17 +17,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.Niek1e.Freerunning.listeners.BlockEvents;
 import me.Niek1e.Freerunning.listeners.EntityEvents;
 import me.Niek1e.Freerunning.listeners.PlayerEvents;
+import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
 import me.Niek1e.Freerunning.utilities.StartCountdown;
 
 public class Freerunning extends JavaPlugin {
 
+	public static Game currentGame;
+
 	public static int startCoundownId;
 
 	private static Freerunning instance;
-	
+
 	public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&7[&6Sprookjescraft&7]&f ");
-	
+
 	private static List<Location> signs = new ArrayList<Location>();
 
 	public void onEnable() {
@@ -40,13 +43,15 @@ public class Freerunning extends JavaPlugin {
 		startCountdown();
 
 		registerLocation();
-		
+
 		registerSigns();
 
 		instance = this;
-		
+
+		new Game();
+
 	}
-	
+
 	public void onDisable() {
 		stopCountdown();
 	}
@@ -68,19 +73,19 @@ public class Freerunning extends JavaPlugin {
 		World world = Bukkit.getWorld(config.getString(path + "World"));
 		String signLoc = config.getString(path + "Sign");
 		String[] cords = signLoc.split(",");
-		Location s = new Location(world, Integer.valueOf(cords[0]), Integer.valueOf(cords[1]), Integer.valueOf(cords[2]));
+		Location s = new Location(world, Integer.valueOf(cords[0]), Integer.valueOf(cords[1]),
+				Integer.valueOf(cords[2]));
 		signs.add(s);
 	}
-	
 	public static void updateSigns(List<String> lines) {
 		for (Location s : signs) {
 			Block block = s.getBlock();
 			BlockState state = block.getState();
 			if (!(state instanceof Sign)) {
-			    return;
+				return;
 			}
 			Sign sign = (Sign) state;
-			for(int i = 0; i < 4; i++) {
+			for (int i = 0; i < 4; i++) {
 				sign.setLine(i, lines.get(i));
 			}
 			sign.update();

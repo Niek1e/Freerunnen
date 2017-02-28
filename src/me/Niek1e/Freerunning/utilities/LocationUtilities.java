@@ -13,7 +13,7 @@ public class LocationUtilities {
 	private static HashMap<String, String> Locations = new HashMap<String, String>();
 
 	public static String getLocation(String name) {
-		if (!(Locations.containsKey(name))){
+		if (!(Locations.containsKey(name))) {
 			return null;
 		}
 
@@ -45,7 +45,7 @@ public class LocationUtilities {
 	}
 
 	public static Location getFullLocation(String name) {
-		if (getLocation(name) == null){
+		if (getLocation(name) == null) {
 			return null;
 		}
 

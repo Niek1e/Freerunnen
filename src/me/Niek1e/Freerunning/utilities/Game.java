@@ -12,10 +12,16 @@ import me.Niek1e.Freerunning.GameState;
 
 public class Game {
 
-	private static boolean canStart = false;
-	private static boolean hasStarted = false;
+	private boolean canStart;
+	private boolean hasStarted;
 
-	public static void start() {
+	public Game() {
+		this.canStart = false;
+		this.hasStarted = false;
+		Freerunning.currentGame = this;
+	}
+
+	public void start() {
 		hasStarted = true;
 		GameState.setState(GameState.IN_GAME);
 
@@ -28,7 +34,7 @@ public class Game {
 		}
 	}
 
-	public static void stop(Player player) {
+	public void stop(Player player) {
 		hasStarted = false;
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
 		GameState.setState(GameState.LOBBY);
@@ -45,11 +51,11 @@ public class Game {
 		sql.addWin(player);
 	}
 
-	public static boolean canStart() {
+	public boolean canStart() {
 		return canStart;
 	}
 
-	public static boolean hasStarted() {
+	public boolean hasStarted() {
 		return hasStarted;
 	}
 

@@ -22,19 +22,18 @@ import org.bukkit.material.Door;
 
 import me.Niek1e.Freerunning.Freerunning;
 import me.Niek1e.Freerunning.GameState;
-import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
 import me.Niek1e.Freerunning.utilities.Players;
 
 public class PlayerEvents implements Listener {
-	
+
 	@EventHandler
 	public void playerPreLogin(AsyncPlayerPreLoginEvent event) {
 		if (!GameState.getState().canJoin()) {
 			event.disallow(Result.KICK_OTHER, ChatColor.RED + "Op dit moment kan je niet joinen, probeer zo opnieuw!");
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
 		Bukkit.broadcastMessage(Freerunning.PREFIX + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
@@ -42,52 +41,54 @@ public class PlayerEvents implements Listener {
 		event.getDrops().clear();
 		Players.removeActive(event.getEntity());
 	}
-	
+
 	@EventHandler
 	public void onPlayerDrop(PlayerDropItemEvent event) {
 		event.setCancelled(true);
 		event.getPlayer().updateInventory();
 	}
-	
+
 	@EventHandler
 	public void onEggThrow(PlayerEggThrowEvent event) {
 		event.setHatching(false);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
-		
-		if(event.getPlayer().getItemInHand().getType() == Material.EGG){
+
+		if (event.getPlayer().getItemInHand().getType() == Material.EGG) {
 			return;
 		}
-		
-		
+
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-			if(event.getClickedBlock().getType() == Material.SPRUCE_DOOR){
-				if(event.getPlayer().hasPermission("freerunnen.deuren")){
+			if (event.getClickedBlock().getType() == Material.SPRUCE_DOOR) {
+				if (event.getPlayer().hasPermission("freerunnen.deuren")) {
 					Door door = (Door) event.getClickedBlock().getState().getData();
-					if(door.isTopHalf()){
-						Door realdoor = (Door) event.getClickedBlock().getLocation().add(0, -1, 0).getBlock().getState().getData();
-						if(!realdoor.isOpen()){
-							event.getPlayer().sendMessage(Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+					if (door.isTopHalf()) {
+						Door realdoor = (Door) event.getClickedBlock().getLocation().add(0, -1, 0).getBlock().getState()
+								.getData();
+						if (!realdoor.isOpen()) {
+							event.getPlayer().sendMessage(
+									Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
 						}
-					}else{
-						if(!door.isOpen()){
-							event.getPlayer().sendMessage(Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+					} else {
+						if (!door.isOpen()) {
+							event.getPlayer().sendMessage(
+									Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!")
 						}
 					}
-				}else{
+				} else {
 					event.setCancelled(true);
 				}
-			}else{
+			} else {
 				return;
 			}
-		}else{
+		} else {
 			return;
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
@@ -96,30 +97,28 @@ public class PlayerEvents implements Listener {
 
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " doet mee met het spel!");
 		event.setJoinMessage("");
-		
+
 		LocationUtilities.teleportPlayer("Spawn", player);
 
 		player.setCanPickupItems(false);
-		
+
 		player.getInventory().clear();
 	}
-	
-	
-	
+
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		if (GameState.isState(GameState.LOBBY)){
-			Game.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+		if (GameState.isState(GameState.LOBBY)) {
+			Freerunning.currentGame.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
 		}
-		
+
 		Player player = event.getPlayer();
-		
+
 		Players.removePlayer(player);
-		
+
 		event.setQuitMessage("");
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " heeft het spel verlaten!");
 	}
-	
+
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
 
@@ -133,29 +132,29 @@ public class PlayerEvents implements Listener {
 		if (!Players.getActivePlayers().contains(event.getPlayer())) {
 			return;
 		}
-		
-		if (!Game.hasStarted()) {
+
+		if (!Freerunning.currentGame.hasStarted()) {
 			return;
 		}
 
 		if (to.getBlock().getType() == Material.OBSIDIAN || to.getBlock().getType() == Material.GOLD_BLOCK) {
 			if (to.getBlock().getType() == Material.OBSIDIAN) {
-				
+
 				event.getPlayer().setHealth(0);
-			
-			}else if(to.getBlock().getType() == Material.GOLD_BLOCK){
-				
-				Game.stop(event.getPlayer());
-				
+
+			} else if (to.getBlock().getType() == Material.GOLD_BLOCK) {
+
+				Freerunning.currentGame.stop(event.getPlayer());
+
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent event) {
-		if (GameState.isState(GameState.IN_GAME)){
+		if (GameState.isState(GameState.IN_GAME)) {
 			event.setRespawnLocation(LocationUtilities.getFullLocation("Spectator"));
-		}else{
+		} else {
 			event.setRespawnLocation(LocationUtilities.getFullLocation("Spawn"));
 		}
 	}

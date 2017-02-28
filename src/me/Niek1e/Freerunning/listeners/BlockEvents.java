@@ -8,16 +8,16 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
 public class BlockEvents implements Listener {
-	
+
 	@EventHandler
-	public void onBlockBreak(BlockBreakEvent event){
-		if(event.getPlayer().hasPermission("freerunnen.block")){
+	public void onBlockBreak(BlockBreakEvent event) {
+		if (event.getPlayer().hasPermission("freerunnen.block")) {
 			return;
 		}
-		
+
 		event.setCancelled(true);
 	}
-	
+
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		Player player = event.getPlayer();
