@@ -19,11 +19,10 @@ import me.Niek1e.Freerunning.listeners.EntityEvents;
 import me.Niek1e.Freerunning.listeners.PlayerEvents;
 import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
-import me.Niek1e.Freerunning.utilities.StartCountdown;
 
 public class Freerunning extends JavaPlugin {
 
-	public static Game currentGame;
+	private Game currentGame;
 
 	public static int startCoundownId;
 
@@ -32,6 +31,12 @@ public class Freerunning extends JavaPlugin {
 	public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&7[&6Sprookjescraft&7]&f ");
 
 	private static List<Location> signs = new ArrayList<Location>();
+	
+	private int timeUntilStart;
+	
+	public Game getCurrentGame() {
+		return currentGame;
+	}
 
 	public void onEnable() {
 		GameState.setState(GameState.LOBBY);
@@ -48,7 +53,7 @@ public class Freerunning extends JavaPlugin {
 
 		instance = this;
 
-		new Game();
+		currentGame = new Game();
 
 	}
 
@@ -77,7 +82,18 @@ public class Freerunning extends JavaPlugin {
 				Integer.valueOf(cords[2]));
 		signs.add(s);
 	}
-	public static void updateSigns(List<String> lines) {
+
+	private void updateTimeSigns() {
+		List<String> lns = new ArrayList<String>();
+		lns.add("Tijd tot begin:");
+		lns.add(ChatColor.GREEN + "" + timeUntilStart + "s");
+		lns.add("Spelers online:");
+		if (Freerunning.getInstance().getCurrentGame().canStart()) {
+			lns.add(ChatColor.GREEN + "" + getCurrentGame().getAllPlayers().size() + " speler(s)");
+		} else {
+			lns.add(ChatColor.RED + "" + getCurrentGame().getAllPlayers().size() + " speler(s)");
+		}
+		
 		for (Location s : signs) {
 			Block block = s.getBlock();
 			BlockState state = block.getState();
@@ -86,7 +102,7 @@ public class Freerunning extends JavaPlugin {
 			}
 			Sign sign = (Sign) state;
 			for (int i = 0; i < 4; i++) {
-				sign.setLine(i, lines.get(i));
+				sign.setLine(i, lns.get(i));
 			}
 			sign.update();
 		}
@@ -106,9 +122,31 @@ public class Freerunning extends JavaPlugin {
 	}
 
 	public void startCountdown() {
-		StartCountdown.timeUntilStart = 60;
-		StartCountdown start = new StartCountdown(this);
-		getServer().getScheduler().runTaskTimer(this, start, 20l, 20l);
+		timeUntilStart = 60;
+		getServer().getScheduler().runTaskTimer(this, new Runnable() {
+			
+			public void run() {
+				if (timeUntilStart == 0) {
+					if (!Freerunning.getInstance().getCurrentGame().canStart()) {
+						restartCountdown();
+						Bukkit.broadcastMessage(
+								Freerunning.PREFIX + "Het spel kan nu niet gestart worden, de timer wordt gereset!");
+						return;
+					}
+					Freerunning.getInstance().getCurrentGame().start();
+					stopCountdown();
+				}
+
+				if (timeUntilStart % 10 == 0 || timeUntilStart <= 10) {
+					Bukkit.broadcastMessage(
+							Freerunning.PREFIX + "Het spel begint over " + String.valueOf(timeUntilStart) + " seconden!");
+				}
+
+				updateTimeSigns();
+
+				timeUntilStart -= 1;
+			}
+		}, 20l, 20l);
 	}
 
 	public void stopCountdown() {

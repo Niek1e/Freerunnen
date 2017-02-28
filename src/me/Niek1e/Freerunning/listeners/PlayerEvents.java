@@ -23,7 +23,6 @@ import org.bukkit.material.Door;
 import me.Niek1e.Freerunning.Freerunning;
 import me.Niek1e.Freerunning.GameState;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
-import me.Niek1e.Freerunning.utilities.Players;
 
 public class PlayerEvents implements Listener {
 
@@ -39,7 +38,7 @@ public class PlayerEvents implements Listener {
 		Bukkit.broadcastMessage(Freerunning.PREFIX + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
 		event.setDeathMessage("");
 		event.getDrops().clear();
-		Players.removeActive(event.getEntity());
+		Freerunning.getInstance().getCurrentGame().removeActive(event.getEntity());
 	}
 
 	@EventHandler
@@ -93,7 +92,7 @@ public class PlayerEvents implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
-		Players.addPlayer(player);
+		Freerunning.getInstance().getCurrentGame().addPlayer(player);
 
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " doet mee met het spel!");
 		event.setJoinMessage("");
@@ -108,12 +107,12 @@ public class PlayerEvents implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		if (GameState.isState(GameState.LOBBY)) {
-			Freerunning.currentGame.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+			Freerunning.getInstance().getCurrentGame().canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
 		}
 
 		Player player = event.getPlayer();
 
-		Players.removePlayer(player);
+		Freerunning.getInstance().getCurrentGame().removePlayer(player);
 
 		event.setQuitMessage("");
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " heeft het spel verlaten!");
@@ -129,11 +128,11 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 
-		if (!Players.getActivePlayers().contains(event.getPlayer())) {
+		if (!Freerunning.getInstance().getCurrentGame().getActivePlayers().contains(event.getPlayer())) {
 			return;
 		}
 
-		if (!Freerunning.currentGame.hasStarted()) {
+		if (!Freerunning.getInstance().getCurrentGame().hasStarted()) {
 			return;
 		}
 
@@ -144,7 +143,7 @@ public class PlayerEvents implements Listener {
 
 			} else if (to.getBlock().getType() == Material.GOLD_BLOCK) {
 
-				Freerunning.currentGame.stop(event.getPlayer());
+				Freerunning.getInstance().getCurrentGame().stop(event.getPlayer());
 
 			}
 		}
