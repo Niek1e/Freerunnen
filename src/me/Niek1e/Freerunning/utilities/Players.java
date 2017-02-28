@@ -32,7 +32,7 @@ public class Players {
 	public static void addPlayer(Player player) {
 		allPlayers.add(player);
 
-		if (Players.getAllPlayers().size() == 1) {
+		if (Players.getAllPlayers().size() > 1) {
 
 			Game.canStart(true);
 		}
