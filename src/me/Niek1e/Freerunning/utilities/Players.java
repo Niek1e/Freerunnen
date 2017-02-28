@@ -26,19 +26,13 @@ public class Players {
 	}
 
 	public static void addActive(Player player) {
-		if (activePlayers.contains(player)) {
-			return;
-		}
-
 		activePlayers.add(player);
 	}
 
 	public static void addPlayer(Player player) {
-		if (!allPlayers.contains(player)) {
-			allPlayers.add(player);
-		}
+		allPlayers.add(player);
 
-		if (Players.getAllPlayers().size() > 1) {
+		if (Players.getAllPlayers().size() == 1) {
 
 			Game.canStart(true);
 		}
