@@ -19,7 +19,7 @@ public class MySQL {
 
 	public MySQL() {
 		try {
-			if (connection.isClosed() || connection == null) {
+			if (connection == null || connection.isClosed()) {
 				openConnection();
 			}
 		} catch (SQLException e) {

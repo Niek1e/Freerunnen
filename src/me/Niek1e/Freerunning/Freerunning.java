@@ -1,9 +1,15 @@
 package me.Niek1e.Freerunning;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -12,7 +18,6 @@ import me.Niek1e.Freerunning.listeners.BlockEvents;
 import me.Niek1e.Freerunning.listeners.EntityEvents;
 import me.Niek1e.Freerunning.listeners.PlayerEvents;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
-import me.Niek1e.Freerunning.utilities.SignUtilities;
 import me.Niek1e.Freerunning.utilities.StartCountdown;
 
 public class Freerunning extends JavaPlugin {
@@ -21,7 +26,9 @@ public class Freerunning extends JavaPlugin {
 
 	private static Freerunning instance;
 	
-	public static String getPrefix = ChatColor.translateAlternateColorCodes('&', "&7[&6Sprookjescraft&7]&f ");
+	public static final String PREFIX = ChatColor.translateAlternateColorCodes('&', "&7[&6Sprookjescraft&7]&f ");
+	
+	private static List<Location> signs = new ArrayList<Location>();
 
 	public void onEnable() {
 		GameState.setState(GameState.LOBBY);
@@ -41,6 +48,7 @@ public class Freerunning extends JavaPlugin {
 	}
 	
 	public void onDisable() {
+		stopCountdown();
 	}
 
 	public static Freerunning getInstance() {
@@ -61,7 +69,22 @@ public class Freerunning extends JavaPlugin {
 		String signLoc = config.getString(path + "Sign");
 		String[] cords = signLoc.split(",");
 		Location s = new Location(world, Integer.valueOf(cords[0]), Integer.valueOf(cords[1]), Integer.valueOf(cords[2]));
-		SignUtilities.addSign(s);
+		signs.add(s);
+	}
+	
+	public static void updateSigns(List<String> lines) {
+		for (Location s : signs) {
+			Block block = s.getBlock();
+			BlockState state = block.getState();
+			if (!(state instanceof Sign)) {
+			    return;
+			}
+			Sign sign = (Sign) state;
+			for(int i = 0; i < 4; i++) {
+				sign.setLine(i, lines.get(i));
+			}
+			sign.update();
+		}
 	}
 
 	public void setupConfig() {
@@ -80,7 +103,7 @@ public class Freerunning extends JavaPlugin {
 	public void startCountdown() {
 		StartCountdown.timeUntilStart = 60;
 		StartCountdown start = new StartCountdown(this);
-		start.runTaskTimer(this, 20l, 20l);
+		getServer().getScheduler().runTaskTimer(this, start, 20l, 20l);
 	}
 
 	public void stopCountdown() {

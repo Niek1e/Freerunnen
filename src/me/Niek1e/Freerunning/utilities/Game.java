@@ -30,7 +30,7 @@ public class Game {
 
 	public static void stop(Player player) {
 		hasStarted = false;
-		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
+		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
 		GameState.setState(GameState.LOBBY);
 		for (Player activePlayer : Players.getAllPlayers()) {
 			Players.removeActive(activePlayer);
@@ -53,8 +53,8 @@ public class Game {
 		return hasStarted;
 	}
 
-	public static void canStart(boolean b) {
-		canStart = b;
+	public static void canStart(boolean canStart) {
+		Game.canStart = canStart;
 	}
 
 }

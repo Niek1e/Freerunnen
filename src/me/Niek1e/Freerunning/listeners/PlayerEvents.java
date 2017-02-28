@@ -37,13 +37,12 @@ public class PlayerEvents implements Listener {
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		Bukkit.broadcastMessage(Freerunning.getPrefix + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
+		Bukkit.broadcastMessage(Freerunning.PREFIX + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
 		event.setDeathMessage("");
 		event.getDrops().clear();
 		Players.removeActive(event.getEntity());
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerDrop(PlayerDropItemEvent event) {
 		event.setCancelled(true);
@@ -71,11 +70,11 @@ public class PlayerEvents implements Listener {
 					if(door.isTopHalf()){
 						Door realdoor = (Door) event.getClickedBlock().getLocation().add(0, -1, 0).getBlock().getState().getData();
 						if(!realdoor.isOpen()){
-							event.getPlayer().sendMessage(Freerunning.getPrefix + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+							event.getPlayer().sendMessage(Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
 						}
 					}else{
 						if(!door.isOpen()){
-							event.getPlayer().sendMessage(Freerunning.getPrefix + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+							event.getPlayer().sendMessage(Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
 						}
 					}
 				}else{
@@ -95,7 +94,7 @@ public class PlayerEvents implements Listener {
 
 		Players.addPlayer(player);
 
-		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + " doet mee met het spel!");
+		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " doet mee met het spel!");
 		event.setJoinMessage("");
 		
 		LocationUtilities.teleportPlayer("Spawn", player);
@@ -118,7 +117,7 @@ public class PlayerEvents implements Listener {
 		Players.removePlayer(player);
 		
 		event.setQuitMessage("");
-		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + " heeft het spel verlaten!");
+		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " heeft het spel verlaten!");
 	}
 	
 	@EventHandler
