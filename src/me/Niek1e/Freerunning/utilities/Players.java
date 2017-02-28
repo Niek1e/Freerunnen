@@ -40,7 +40,7 @@ public class Players {
 
 		if (Players.getAllPlayers().size() > 1) {
 
-			Game.canStart(true);
+			StartCountdown.getCurrentGame().canStart(true);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class Players {
 		activePlayers.remove(player);
 
 		if (activePlayers.size() == 1 && GameState.isState(GameState.IN_GAME)) {
-			Game.stop(activePlayers.get(0));
+			StartCountdown.getCurrentGame().stop(activePlayers.get(0));
 		}
 	}
 
@@ -58,7 +58,7 @@ public class Players {
 
 		if (GameState.isState(GameState.LOBBY)) {
 			if (!(allPlayers.size() > 1)) {
-				Game.canStart(false);
+				StartCountdown.getCurrentGame().canStart(false);
 			}
 		}
 	}

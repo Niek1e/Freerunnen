@@ -12,6 +12,16 @@ import me.Niek1e.Freerunning.Freerunning;
 public class StartCountdown extends BukkitRunnable {
 
 	Freerunning plugin;
+	
+	private static Game currentGame;
+	
+	public static Game getCurrentGame() {
+		return currentGame;
+	}
+	
+	public static void setCurrentGame(Game game) {
+		currentGame = game;
+	}
 
 	public StartCountdown(Freerunning pl){
 		plugin = pl;
@@ -22,7 +32,7 @@ public class StartCountdown extends BukkitRunnable {
 		lns.add("Tijd tot begin:");
 		lns.add(ChatColor.GREEN + "" + timeUntilStart + "s");
 		lns.add("Spelers online:");
-		if(Game.canStart()){
+		if(getCurrentGame().canStart()){
 			lns.add(ChatColor.GREEN + "" + Players.getAllPlayers().size() + " speler(s)");
 		}else{
 			lns.add(ChatColor.RED + "" + Players.getAllPlayers().size() + " speler(s)");
@@ -35,12 +45,12 @@ public class StartCountdown extends BukkitRunnable {
 
 	public void run() {
 		if (timeUntilStart == 0) {
-			if(!Game.canStart()){
+			if(!getCurrentGame().canStart()){
 				plugin.restartCountdown();
 				Bukkit.broadcastMessage(Freerunning.getPrefix + "Het spel kan nu niet gestart worden, de timer wordt gereset!");
 				return;
 			}
-			Game.start();
+			getCurrentGame().start();
 			plugin.stopCountdown();
 		}
 

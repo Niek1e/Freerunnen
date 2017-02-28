@@ -25,6 +25,7 @@ import me.Niek1e.Freerunning.GameState;
 import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
 import me.Niek1e.Freerunning.utilities.Players;
+import me.Niek1e.Freerunning.utilities.StartCountdown;
 
 public class PlayerEvents implements Listener {
 	
@@ -110,7 +111,8 @@ public class PlayerEvents implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		if (GameState.isState(GameState.LOBBY)){
-			Game.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+			Game game = new Game();
+			game.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
 		}
 		
 		Player player = event.getPlayer();
@@ -135,7 +137,7 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 		
-		if (!Game.hasStarted()) {
+		if (!StartCountdown.getCurrentGame().hasStarted()) {
 			return;
 		}
 
@@ -146,7 +148,7 @@ public class PlayerEvents implements Listener {
 			
 			}else if(to.getBlock().getType() == Material.GOLD_BLOCK){
 				
-				Game.stop(event.getPlayer());
+				StartCountdown.getCurrentGame().stop(event.getPlayer());
 				
 			}
 		}
