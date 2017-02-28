@@ -13,7 +13,7 @@ public class StartCountdown extends BukkitRunnable {
 
 	Freerunning plugin;
 	
-	private static Game currentGame;
+	private static Game currentGame = new Game();
 	
 	public static Game getCurrentGame() {
 		return currentGame;
