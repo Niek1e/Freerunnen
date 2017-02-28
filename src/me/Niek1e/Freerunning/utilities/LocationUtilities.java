@@ -12,12 +12,12 @@ public class LocationUtilities {
 	// NAAM ; WORLD,X,Y,Z
 	private static HashMap<String, String> Locations = new HashMap<String, String>();
 
-	public static String getLocation(String name) {
-		if (!(Locations.containsKey(name))) {
+	public static String getLocation(String location) {
+		if (!(Locations.containsKey(location))) {
 			return null;
 		}
 
-		return Locations.get(name);
+		return Locations.get(location);
 	}
 
 	public static void addLocation(String name, String location) {
