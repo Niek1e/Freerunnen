@@ -25,6 +25,12 @@ import me.Niek1e.Freerunning.GameState;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
 
 public class PlayerEvents implements Listener {
+	
+	Freerunning freerunning;
+	
+	public PlayerEvents(Freerunning pl){
+		freerunning = pl;
+	}
 
 	@EventHandler
 	public void playerPreLogin(AsyncPlayerPreLoginEvent event) {
@@ -38,7 +44,7 @@ public class PlayerEvents implements Listener {
 		Bukkit.broadcastMessage(Freerunning.PREFIX + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
 		event.setDeathMessage("");
 		event.getDrops().clear();
-		Freerunning.getInstance().getCurrentGame().removeActive(event.getEntity());
+		freerunning.getCurrentGame().removeActive(event.getEntity());
 	}
 
 	@EventHandler
@@ -52,11 +58,10 @@ public class PlayerEvents implements Listener {
 		event.setHatching(false);
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 
-		if (event.getPlayer().getItemInHand().getType() == Material.EGG) {
+		if (event.getPlayer().getInventory().getItemInMainHand().getType() == Material.EGG) {
 			return;
 		}
 
@@ -92,7 +97,7 @@ public class PlayerEvents implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		Player player = event.getPlayer();
 
-		Freerunning.getInstance().getCurrentGame().addPlayer(player);
+		freerunning.getCurrentGame().addPlayer(player);
 
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " doet mee met het spel!");
 		event.setJoinMessage("");
@@ -107,12 +112,12 @@ public class PlayerEvents implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
 		if (GameState.isState(GameState.LOBBY)) {
-			Freerunning.getInstance().getCurrentGame().canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+			freerunning.getCurrentGame().canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
 		}
 
 		Player player = event.getPlayer();
 
-		Freerunning.getInstance().getCurrentGame().removePlayer(player);
+		freerunning.getCurrentGame().removePlayer(player);
 
 		event.setQuitMessage("");
 		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + " heeft het spel verlaten!");
@@ -128,11 +133,11 @@ public class PlayerEvents implements Listener {
 			return;
 		}
 
-		if (!Freerunning.getInstance().getCurrentGame().getActivePlayers().contains(event.getPlayer())) {
+		if (!freerunning.getCurrentGame().getActivePlayers().contains(event.getPlayer())) {
 			return;
 		}
 
-		if (!Freerunning.getInstance().getCurrentGame().hasStarted()) {
+		if (!freerunning.getCurrentGame().hasStarted()) {
 			return;
 		}
 
@@ -143,7 +148,7 @@ public class PlayerEvents implements Listener {
 
 			} else if (to.getBlock().getType() == Material.GOLD_BLOCK) {
 
-				Freerunning.getInstance().getCurrentGame().stop(event.getPlayer());
+				freerunning.getCurrentGame().stop(event.getPlayer());
 
 			}
 		}
@@ -152,9 +157,9 @@ public class PlayerEvents implements Listener {
 	@EventHandler
 	public void onRespawn(PlayerRespawnEvent event) {
 		if (GameState.isState(GameState.IN_GAME)) {
-			event.setRespawnLocation(LocationUtilities.getFullLocation("Spectator"));
+			event.setRespawnLocation(LocationUtilities.getLocation("Spectator"));
 		} else {
-			event.setRespawnLocation(LocationUtilities.getFullLocation("Spawn"));
+			event.setRespawnLocation(LocationUtilities.getLocation("Spawn"));
 		}
 	}
 
