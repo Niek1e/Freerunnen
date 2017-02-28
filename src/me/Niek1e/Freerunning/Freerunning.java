@@ -67,7 +67,7 @@ public class Freerunning extends JavaPlugin {
 
 	public void registerListeners() {
 		PluginManager pm = getServer().getPluginManager();
-		pm.registerEvents(new PlayerEvents(), this);
+		pm.registerEvents(new PlayerEvents(this), this);
 		pm.registerEvents(new BlockEvents(), this);
 		pm.registerEvents(new EntityEvents(), this);
 	}
