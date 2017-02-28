@@ -19,7 +19,7 @@ public class MySQL {
 
 	public MySQL() {
 		try {
-			if (connection.isClosed() || connection == null) {
+			if (connection == null || connection.isClosed()) {
 				openConnection();
 			}
 		} catch (SQLException e) {
@@ -40,14 +40,13 @@ public class MySQL {
 			int wins = 0;
 			PreparedStatement getWins = connection.prepareStatement("SELECT wins FROM wins WHERE uuid = ?;");
 			getWins.setString(1, player.getUniqueId().toString());
-			
+
 			ResultSet resultSet = getWins.executeQuery();
 			resultSet.next();
 
 			wins = resultSet.getInt("wins");
 
-			PreparedStatement updateWins = connection
-					.prepareStatement("UPDATE wins SET wins = ? WHERE uuid = ?;");
+			PreparedStatement updateWins = connection.prepareStatement("UPDATE wins SET wins = ? WHERE uuid = ?;");
 			updateWins.setInt(1, wins + 1);
 			updateWins.setString(2, player.getUniqueId().toString());
 

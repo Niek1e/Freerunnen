@@ -14,11 +14,11 @@ public class Game {
 
 	private boolean canStart;
 	private boolean hasStarted;
-	
+
 	public Game() {
 		this.canStart = false;
 		this.hasStarted = false;
-		StartCountdown.setCurrentGame(this);
+		Freerunning.currentGame = this;
 	}
 
 	public void start() {
@@ -36,7 +36,7 @@ public class Game {
 
 	public void stop(Player player) {
 		hasStarted = false;
-		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
+		Bukkit.broadcastMessage(Freerunning.PREFIX + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
 		GameState.setState(GameState.LOBBY);
 		for (Player activePlayer : Players.getAllPlayers()) {
 			Players.removeActive(activePlayer);

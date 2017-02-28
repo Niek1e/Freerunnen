@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import me.Niek1e.Freerunning.Freerunning;
 import me.Niek1e.Freerunning.GameState;
 
 public class Players {
@@ -26,21 +27,15 @@ public class Players {
 	}
 
 	public static void addActive(Player player) {
-		if (activePlayers.contains(player)) {
-			return;
-		}
-
 		activePlayers.add(player);
 	}
 
 	public static void addPlayer(Player player) {
-		if (!allPlayers.contains(player)) {
-			allPlayers.add(player);
-		}
+		allPlayers.add(player);
 
 		if (Players.getAllPlayers().size() == 1) {
 
-			StartCountdown.getCurrentGame().canStart(true);
+			Freerunning.currentGame.canStart(true);
 		}
 	}
 
@@ -48,7 +43,7 @@ public class Players {
 		activePlayers.remove(player);
 
 		if (activePlayers.size() == 1 && GameState.isState(GameState.IN_GAME)) {
-			StartCountdown.getCurrentGame().stop(activePlayers.get(0));
+			Freerunning.currentGame.stop(activePlayers.get(0));
 		}
 	}
 
@@ -58,7 +53,7 @@ public class Players {
 
 		if (GameState.isState(GameState.LOBBY)) {
 			if (!(allPlayers.size() > 1)) {
-				StartCountdown.getCurrentGame().canStart(false);
+				Freerunning.currentGame.canStart(false);
 			}
 		}
 	}
