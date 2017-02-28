@@ -3,33 +3,31 @@ package me.Niek1e.Freerunning.utilities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 
 public class SignUtilities {
 
-	private static List<String> signs = new ArrayList<String>();
+	private static List<Location> signs = new ArrayList<Location>();
 
-	public static void addSign(String location) {
+	public static void addSign(Location location) {
 		signs.add(location);
 	}
 
-	public static void updateSigns(String ln1, String ln2, String ln3, String ln4) {
-		for (String s : signs) {
-			String[] cords = s.split(",");
-			Block block = Bukkit.getWorld(cords[0]).getBlockAt(Integer.valueOf(cords[1]), Integer.valueOf(cords[2]),
-					Integer.valueOf(cords[3]));
+	public static void updateSigns(List<String> lines) {
+		for (Location s : signs) {
+			Block block = s.getBlock();
 			BlockState state = block.getState();
 			if (!(state instanceof Sign)) {
 			    return;
 			}
 			Sign sign = (Sign) state;
-			sign.setLine(0, ln1);
-			sign.setLine(1, ln2);
-			sign.setLine(2, ln3);
-			sign.setLine(3, ln4);
+			sign.setLine(0, lines.get(0));
+			sign.setLine(1, lines.get(1));
+			sign.setLine(2, lines.get(2));
+			sign.setLine(3, lines.get(3));
 			sign.update();
 		}
 	}

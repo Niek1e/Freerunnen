@@ -1,5 +1,6 @@
 package me.Niek1e.Freerunning.utilities;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -14,7 +15,6 @@ public class Game {
 	private static boolean canStart = false;
 	private static boolean hasStarted = false;
 
-	@SuppressWarnings("deprecation")
 	public static void start() {
 		hasStarted = true;
 		GameState.setState(GameState.IN_GAME);
@@ -24,14 +24,13 @@ public class Game {
 			LocationUtilities.teleportPlayer("Game", activePlayer);
 			activePlayer.getInventory().clear();
 			activePlayer.getInventory().addItem(new ItemStack(Material.EGG, 8));
-			activePlayer.updateInventory();
 			activePlayer.setGameMode(GameMode.SURVIVAL);
 		}
 	}
 
 	public static void stop(Player player) {
 		hasStarted = false;
-		ChatUtilities.broadcast(player.getName() + ChatColor.GREEN + " heeft gewonnen!");
+		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + ChatColor.GREEN + " heeft gewonnen!");
 		GameState.setState(GameState.LOBBY);
 		for (Player activePlayer : Players.getAllPlayers()) {
 			Players.removeActive(activePlayer);
@@ -40,12 +39,10 @@ public class Game {
 			activePlayer.getInventory().clear();
 		}
 		Freerunning.getInstance().startCountdown();
-		
-		//MAAK EEN TABEL MET uuid EN wins
 
-		if(SQL.SQLEnabled)
-			SQL.addWin(player);
-
+		// MAAK EEN TABEL MET uuid EN wins
+		MySQL sql = new MySQL();
+		sql.addWin(player);
 	}
 
 	public static boolean canStart() {
@@ -56,7 +53,7 @@ public class Game {
 		return hasStarted;
 	}
 
-	public static void setCanStart(boolean b) {
+	public static void canStart(boolean b) {
 		canStart = b;
 	}
 

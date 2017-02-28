@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -17,11 +18,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.material.Door;
 
+import me.Niek1e.Freerunning.Freerunning;
 import me.Niek1e.Freerunning.GameState;
-import me.Niek1e.Freerunning.utilities.ChatUtilities;
 import me.Niek1e.Freerunning.utilities.Game;
 import me.Niek1e.Freerunning.utilities.LocationUtilities;
 import me.Niek1e.Freerunning.utilities.Players;
@@ -37,7 +37,7 @@ public class PlayerEvents implements Listener {
 	
 	@EventHandler
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		ChatUtilities.broadcast(event.getEntity().getName() + ChatColor.RED + " is gevallen!");
+		Bukkit.broadcastMessage(Freerunning.getPrefix + event.getEntity().getName() + ChatColor.RED + " is gevallen!");
 		event.setDeathMessage("");
 		event.getDrops().clear();
 		Players.removeActive(event.getEntity());
@@ -70,11 +70,13 @@ public class PlayerEvents implements Listener {
 					Door door = (Door) event.getClickedBlock().getState().getData();
 					if(door.isTopHalf()){
 						Door realdoor = (Door) event.getClickedBlock().getLocation().add(0, -1, 0).getBlock().getState().getData();
-						if(!realdoor.isOpen())
-							ChatUtilities.playerMessage(ChatColor.RED + "Vergeet de deur niet te sluiten!", event.getPlayer());
+						if(!realdoor.isOpen()){
+							event.getPlayer().sendMessage(Freerunning.getPrefix + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+						}
 					}else{
-						if(!door.isOpen())
-							ChatUtilities.playerMessage(ChatColor.RED + "Vergeet de deur niet te sluiten!", event.getPlayer());
+						if(!door.isOpen()){
+							event.getPlayer().sendMessage(Freerunning.getPrefix + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+						}
 					}
 				}else{
 					event.setCancelled(true);
@@ -93,7 +95,7 @@ public class PlayerEvents implements Listener {
 
 		Players.addPlayer(player);
 
-		ChatUtilities.broadcast(player.getName() + " doet mee met het spel!");
+		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + " doet mee met het spel!");
 		event.setJoinMessage("");
 		
 		LocationUtilities.teleportPlayer("Spawn", player);
@@ -107,15 +109,16 @@ public class PlayerEvents implements Listener {
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		if (GameState.isState(GameState.LOBBY)) 
-			Game.setCanStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+		if (GameState.isState(GameState.LOBBY)){
+			Game.canStart(Bukkit.getOnlinePlayers().size() - 1 > 1);
+		}
 		
 		Player player = event.getPlayer();
 		
 		Players.removePlayer(player);
 		
 		event.setQuitMessage("");
-		ChatUtilities.broadcast(player.getName() + " heeft het spel verlaten!");
+		Bukkit.broadcastMessage(Freerunning.getPrefix + player.getName() + " heeft het spel verlaten!");
 	}
 	
 	@EventHandler

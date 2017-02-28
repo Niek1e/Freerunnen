@@ -26,7 +26,7 @@ public class Players {
 	}
 
 	public static void addActive(Player player) {
-		if (activePlayers.contains(player.getName())) {
+		if (activePlayers.contains(player)) {
 			return;
 		}
 
@@ -34,21 +34,17 @@ public class Players {
 	}
 
 	public static void addPlayer(Player player) {
-		if (!allPlayers.contains(player)){
+		if (!allPlayers.contains(player)) {
 			allPlayers.add(player);
 		}
-		
+
 		if (Players.getAllPlayers().size() > 1) {
-			
-			Game.setCanStart(true);
+
+			Game.canStart(true);
 		}
 	}
 
 	public static void removeActive(Player player) {
-		if (!activePlayers.contains(player)) {
-			return;
-		}
-
 		activePlayers.remove(player);
 
 		if (activePlayers.size() == 1 && GameState.isState(GameState.IN_GAME)) {
@@ -57,17 +53,12 @@ public class Players {
 	}
 
 	public static void removePlayer(Player player) {
-		if (activePlayers.contains(player)) {
-			removeActive(player);
-		}
+		removeActive(player);
+		allPlayers.remove(player);
 
-		if (allPlayers.contains(player)) {
-			allPlayers.remove(player);
-		}
-		
-		if(GameState.isState(GameState.LOBBY)){
-			if(!(allPlayers.size() > 1)){
-				Game.setCanStart(false);
+		if (GameState.isState(GameState.LOBBY)) {
+			if (!(allPlayers.size() > 1)) {
+				Game.canStart(false);
 			}
 		}
 	}
