@@ -75,7 +75,7 @@ public class PlayerEvents implements Listener {
 					} else {
 						if (!door.isOpen()) {
 							event.getPlayer().sendMessage(
-									Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!");
+									Freerunning.PREFIX + ChatColor.RED + "Vergeet de deur niet te sluiten!")
 						}
 					}
 				} else {

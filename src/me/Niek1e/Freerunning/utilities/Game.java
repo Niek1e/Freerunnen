@@ -59,8 +59,8 @@ public class Game {
 		return hasStarted;
 	}
 
-	public void canStart(boolean b) {
-		canStart = b;
+	public static void canStart(boolean canStart) {
+		Game.canStart = canStart;
 	}
 
 }

@@ -77,7 +77,6 @@ public class Freerunning extends JavaPlugin {
 				Integer.valueOf(cords[2]));
 		signs.add(s);
 	}
-
 	public static void updateSigns(List<String> lines) {
 		for (Location s : signs) {
 			Block block = s.getBlock();
